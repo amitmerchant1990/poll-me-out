@@ -4,15 +4,28 @@ function PollListCtrl($scope, Poll) {
 }
 
 // Voting / viewing poll results
-function PollItemCtrl($scope, $routeParams, Poll) {
+function PollItemCtrl($scope, $routeParams, Poll, socket) {
   $scope.poll = Poll.get({pollId: $routeParams.pollId});
+  socket.on('myvote', function(data){
+    if(data._id = $routeParams.pollId){
+      $scope.poll = data;
+    }
+  });
+
+  socket.on('vote', function(data){
+    if(data._id = $routeParams.pollId){
+      $scope.poll.choices = data.choices;
+      $scope.poll.totalVotes = data.totalVotes;
+    }
+  });
+
   $scope.vote = function() {
     var pollId = $scope.poll._id,
-          choiceId = $scope.poll.userVote;
+        choiceId = $scope.poll.userVote;
 
     if(choiceId){
       var voteObj = {poll_id : pollId, choice: choiceId};
-      //socket.emit('send:vote', voteObj);
+      socket.emit('send:vote', voteObj);
     }else {
       alert('You must select an option to vote for');
     }

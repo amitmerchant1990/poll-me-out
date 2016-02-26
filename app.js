@@ -1,9 +1,13 @@
 var express = require('express');
+var routes = require('./routes');
+var cors = require('cors');
+//var http = require('http');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+//var io = require('socket.io');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -21,6 +25,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors());
 
 app.use('/', routes);
 app.use('/users', users);
@@ -60,5 +65,15 @@ app.use(function(err, req, res, next) {
   });
 });
 
+app.post('/vote', routes.vote);
+
+var server = app.listen(4000);
+var io = require('socket.io').listen(server);
+
+io.sockets.on('connection', routes.vote);
+
+server.listen(app.get('port'), function(){
+  console.log('Express server listening on port ' + app.get('port'));
+});
 
 module.exports = app;

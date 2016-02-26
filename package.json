@@ -1,6 +1,6 @@
 {
-  "name": "PollApp",
-  "version": "0.0.0",
+  "name": "poll-me-out",
+  "version": "1.0.0",
   "author": "Amit Merchant",
   "private": true,
   "scripts": {
@@ -16,6 +16,6 @@
     "mongoose": "^4.4.5",
     "morgan": "~1.6.1",
     "serve-favicon": "~2.3.0",
-    "socket.io": "~0.9.16"
+    "socket.io": "^1.4.5"
   }
 }
